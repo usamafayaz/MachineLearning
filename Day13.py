@@ -44,3 +44,62 @@
 # Concolution Neural Network (CNN)
 
 # 128x128  ==>  Conv Net 64 ==> 126x126x64 ==> Max Pooling ==> 63x63x64 ==> Conv Net 128 ==> 61x61x128 ==> Max Pooling ==> 30x30x128 ==> Conv Net 128 ==> 28x28x128 ==> Max Pooling ==> 14x14x128
+
+
+# Loss Function
+# Difference between actual output y and output produced by Neural Network y^
+# l = y-y^
+# Weights are learnable parameters.
+
+# When we back propagate the loss function the weights will be changed.
+# We place the line in the optimal place so that most of the points are correct.
+
+# Gradient Descent Algorithm
+# To find the minimum error.
+# Pnew =Pold+StepSize => 0.01
+# if StepSize=0 then Pnew =Pold
+# rate of change in x axis / rate of change in y axis = gradient => derivative.
+
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Conv2D, MaxPool2D, Flatten
+from keras.utils import to_categorical
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+
+def LossandAccuracy():
+    # laod mnist dataset
+    classes = 10
+    inputSize = 784
+    (trainData, trainLbl), (testData, testLbl) = mnist.load_data()
+    # Convert to categorical labels.
+    trainLbl = to_categorical(trainLbl, classes)
+    testLbl = to_categorical(testLbl, classes)
+
+    model = Sequential([
+        Conv2D(32,(3,3),activation='relu',input_shape=(28,28,1)),
+        MaxPool2D((2,2)),
+        Conv2D(64,(3,3)),
+        MaxPool2D((2,2)),
+        Flatten(),
+
+        Dense(100, input_dim=inputSize,activation='sigmoid'),  # N-100 hidden layer neurons, M input
+        Dense(classes,activation='softmax'),  # 10 K Output
+    ])
+
+    # Provide basic settings for neural network.
+    model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics='accuracy')
+
+    # Provide training for neural network.
+    history = model.fit(trainData, trainLbl, epochs=20, batch_size=80, verbose=1)
+
+    # Provide testing on the neural network.
+    result = model.evaluate(testData, testLbl)
+    print(model.summary())
+
+    # save the trained model in the file.
+    model.save("model.keras")
+
+
+LossandAccuracy()

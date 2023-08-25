@@ -14,6 +14,7 @@ def saveImage():
 def callAPI():
     @app.route('/hello', methods=['POST'])
     def getDigitsFromImage():
+        print("billi")
         img = request.files['file']
         print(type(img))
         model = load_model('model.hdf5')
