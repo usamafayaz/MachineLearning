@@ -46,6 +46,7 @@ session.commit()
 # Route to get student data
 @app.route('/students', methods=['GET'])
 def get_students():
+    print('bolo')
     students = session.query(Student).all()
     student_list = [{'id': student.id, 'name': student.name, 'age': student.age} for student in students]
     return jsonify(student_list)

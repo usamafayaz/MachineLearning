@@ -29,7 +29,7 @@ def callAPI():
         return str(digit)
 
     if __name__ == "__main__":
-        app.run()
+        app.run(debug=True)
 callAPI()
 
 
